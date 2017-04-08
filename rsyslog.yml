@@ -1,0 +1,39 @@
+version: "3"
+services:
+  # runs for each service replica (or creates few replicas at once)
+  web:
+    image: nginx:latest
+    ports:
+     - "8080:80"
+    volumes:
+     - ./hello:/usr/share/nginx/html/index.html:ro
+    restart: always
+
+  # runs once on host startup
+  log-agent:
+    image: gliderlabs/logspout
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+    command: ["syslog+tcp://log-server:514?filter.name=*_web_*"]
+    environment:
+     - DEBUG=1
+     - SYSLOG_HOSTNAME=${HOSTNAME}
+    networks:
+     - back-tier
+    restart: always
+    
+  # runs once on log server startup
+  log-server:
+    image: rsyslog-server
+    build: ./rsyslog-server
+    volumes:
+     - ./logs:/var/log/remote/
+    expose:
+     - "514"
+    networks:
+     - back-tier
+    restart: always
+
+networks:
+  back-tier:
+    driver: bridge  # should be replaced with overlay in a multi-host env
