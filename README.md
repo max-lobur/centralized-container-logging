@@ -23,8 +23,8 @@ Currently 3 services are merged into one yaml for convenience. It has comments a
 5. Stop `docker-compose -f rsyslog.yml down`
 
 # Adressing Requirements
-1. Log server is addressed via docker built-in service discovery, e.g. referred by
-name "log-server"
+1. Log server is linked via [docker built-in service discovery](https://docs.docker.com/docker-cloud/apps/service-links/), e.g. referred by
+name "log-server".
 2. Logspout used as a log-agent is only capturing container's stdout/stderr, which
 I believe is correct because a container should run no more than 1 process. Unlike
 a "Sidecar" approach you cannot list specific files here. However multiple message-level filters are available:
@@ -33,5 +33,5 @@ a "Sidecar" approach you cannot list specific files here. However multiple messa
  * [Rsyslog selectors]( http://www.rsyslog.com/doc/v8-stable/configuration/filters.html#selectors)
 
 
- # Extra credits
+ # Extra credit
 Centralized logging is available out-of-box in kubernetes: [fluentd + elasticsearch + grafana/kibana](https://deis.com/blog/2016/kubernetes-logging-with-elasticsearch-and-kibana/)
