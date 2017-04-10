@@ -21,7 +21,7 @@ services:
     networks:
      - back-tier
     restart: always
-    
+
   # runs once on log server startup
   log-server:
     image: rsyslog-server
@@ -36,4 +36,6 @@ services:
 
 networks:
   back-tier:
-    driver: bridge  # should be replaced with overlay in a multi-host env
+    # should be replaced with overlay in a multi-host env
+    # (yml will be deployed in a docker swarm)
+    driver: bridge
